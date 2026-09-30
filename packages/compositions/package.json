@@ -15,7 +15,19 @@
     "typecheck": "tsc -b",
     "test": "vitest run"
   },
+  "dependencies": {
+    "@forge/core": "workspace:*",
+    "@forge/kit": "workspace:*",
+    "@forge/layouts": "workspace:*",
+    "@forge/schema": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.0"
+  },
   "devDependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
   }
