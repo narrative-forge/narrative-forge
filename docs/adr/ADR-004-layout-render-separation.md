@@ -22,6 +22,17 @@
 - `packages/render`（`@forge/render`）将布局映射为 Remotion 实现并输出视频；
 - 两者通过 `@forge/schema` 定义的契约通信。
 
+### 接口约束
+
+布局层输出为**纯数据**：`{ id, x, y, visible, opacity }[]`（或等价物），
+不得包含 React 元素、CSS 字符串、渲染回调或任何框架相关对象。
+
+此约束可通过单元测试验证：
+
+- 布局层返回值可被 `JSON.stringify` 序列化
+- 返回值中不包含 `function` 类型的字段
+- 渲染层可完全替换（如从 Remotion 换成其他 React 渲染器）而不修改布局层
+
 ## 理由
 
 - 可替换渲染后端（未来若换渲染引擎，布局层不受影响）。
