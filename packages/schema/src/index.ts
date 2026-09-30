@@ -1,7 +1,11 @@
-// @forge/schema — placeholder scaffold.
-//
-// Part of the Narrative Forge monorepo. No business logic is
-// implemented in this skeleton phase; this export exists so the
-// package compiles, emits a declaration, and resolves via its
-// `exports` map.
-export const PACKAGE_NAME = '@forge/schema' as const;
+/**
+ * @forge/schema — public API.
+ *
+ * Re-exports the derived types, the Zod schemas (single source of truth),
+ * and the schema versioning helpers. Consumers should import from
+ * `@forge/schema` and validate untrusted input with `StorySchema.parse`.
+ */
+
+export * from './types';
+export * from './zod';
+export * from './version';

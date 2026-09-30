@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "title": "红军三大主力会师",
+    "resolution": "1920x1080",
+    "fps": 30
+  },
+  "views": [
+    {
+      "id": "main-timeline",
+      "type": "timeline",
+      "layout": "horizontal",
+      "duration": 30
+    }
+  ],
+  "nodes": [
+    {
+      "id": "red-first-front-reaches-north-shaanxi",
+      "type": "event",
+      "label": "中央红军到达陕北",
+      "time": "1935-10-19",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红一方面军主力抵达陕北吴起镇，中央红军长征胜利结束，为三大主力会师奠定落脚点。"
+      }
+    },
+    {
+      "id": "west-expedition-launched",
+      "type": "event",
+      "label": "红军西征战役发起",
+      "time": "1936-05-01",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红一方面军发起西征，巩固和扩大陕甘宁根据地，为会师创造有利态势。"
+      }
+    },
+    {
+      "id": "red-second-sixth-corps-join-fourth",
+      "type": "event",
+      "label": "红二、六军团甘孜会师",
+      "time": "1936-07-02",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红二、六军团在甘孜与红四方面军会师，促成两个方面军领导机构统一。"
+      }
+    },
+    {
+      "id": "red-second-front-formed",
+      "type": "event",
+      "label": "红二方面军成立",
+      "time": "1936-07-05",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红二、六军团与红三十二军合编为红二方面军，任弼时、贺龙等领导。"
+      }
+    },
+    {
+      "id": "fourth-front-northward",
+      "type": "event",
+      "label": "红四方面军北上",
+      "time": "1936-08-01",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红四方面军从甘孜地区北上，向甘南挺进，准备与红一、二方面军会合。"
+      }
+    },
+    {
+      "id": "huining-assembly",
+      "type": "event",
+      "label": "红一、四方面军会宁会师",
+      "time": "1936-10-09",
+      "featured": true,
+      "media": [],
+      "metadata": {
+        "description": "红一、四方面军在甘肃会宁胜利会师，是会宁会师的核心节点。"
+      }
+    },
+    {
+      "id": "second-front-arrives-gansu",
+      "type": "event",
+      "label": "红二方面军北上甘南",
+      "time": "1936-10-15",
+      "featured": false,
+      "media": [],
+      "metadata": {
+        "description": "红二方面军突破封锁，穿越西兰大道，进入甘南地区与主力靠拢。"
+      }
+    },
+    {
+      "id": "three-main-forces-assembly",
+      "type": "event",
+      "label": "三大主力红军会师完成",
+      "time": "1936-10-22",
+      "featured": true,
+      "media": [],
+      "metadata": {
+        "description": "红一、二方面军在将台堡会师，三大主力红军会师胜利完成，长征结束。"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "red-first-front-reaches-north-shaanxi",
+      "to": "west-expedition-launched",
+      "type": "temporal"
+    },
+    {
+      "from": "west-expedition-launched",
+      "to": "red-second-sixth-corps-join-fourth",
+      "type": "temporal"
+    },
+    {
+      "from": "red-second-sixth-corps-join-fourth",
+      "to": "red-second-front-formed",
+      "type": "temporal"
+    },
+    { "from": "red-second-front-formed", "to": "fourth-front-northward", "type": "temporal" },
+    { "from": "fourth-front-northward", "to": "huining-assembly", "type": "temporal" },
+    { "from": "huining-assembly", "to": "second-front-arrives-gansu", "type": "temporal" },
+    { "from": "second-front-arrives-gansu", "to": "three-main-forces-assembly", "type": "temporal" }
+  ],
+  "assets": []
+}
