@@ -1,7 +1,11 @@
-// @forge/core — placeholder scaffold.
-//
-// Part of the Narrative Forge monorepo. No business logic is
-// implemented in this skeleton phase; this export exists so the
-// package compiles, emits a declaration, and resolves via its
-// `exports` map.
-export const PACKAGE_NAME = '@forge/core' as const;
+/**
+ * @forge/core — public API.
+ *
+ * Domain logic for Narrative Forge: rhythm scheduling (buildSchedule /
+ * locate) and the frame→progress mapping consumed by the Remotion render
+ * layer (frameToProgress).
+ */
+
+export { buildSchedule, locate } from './schedule';
+export type { Schedule, ScheduleOptions, ScheduleSegment, LocateResult } from './schedule';
+export { frameToProgress } from './frame';

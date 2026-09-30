@@ -1,0 +1,55 @@
+{
+  "totalSec": 98.05,
+  "introSec": 0.8,
+  "outroSec": 1,
+  "segments": [
+    {
+      "nodeId": "red-first-front-reaches-north-shaanxi",
+      "startSec": 0.8,
+      "endSec": 13.15,
+      "durationSec": 12.35
+    },
+    {
+      "nodeId": "west-expedition-launched",
+      "startSec": 13.15,
+      "endSec": 25.15,
+      "durationSec": 12
+    },
+    {
+      "nodeId": "red-second-sixth-corps-join-fourth",
+      "startSec": 25.15,
+      "endSec": 37.25,
+      "durationSec": 12.1
+    },
+    {
+      "nodeId": "red-second-front-formed",
+      "startSec": 37.25,
+      "endSec": 49.15,
+      "durationSec": 11.9
+    },
+    {
+      "nodeId": "fourth-front-northward",
+      "startSec": 49.15,
+      "endSec": 61.099999999999994,
+      "durationSec": 11.95
+    },
+    {
+      "nodeId": "huining-assembly",
+      "startSec": 61.099999999999994,
+      "endSec": 73.05,
+      "durationSec": 11.95
+    },
+    {
+      "nodeId": "second-front-arrives-gansu",
+      "startSec": 73.05,
+      "endSec": 84.95,
+      "durationSec": 11.9
+    },
+    {
+      "nodeId": "three-main-forces-assembly",
+      "startSec": 84.95,
+      "endSec": 97.05,
+      "durationSec": 12.1
+    }
+  ]
+}
