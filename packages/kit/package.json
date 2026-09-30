@@ -1,0 +1,22 @@
+{
+  "name": "@forge/kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reusable content/UI kit for Narrative Forge.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3",
+    "vitest": "1.2.2"
+  }
+}

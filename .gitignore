@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.cjs
+
+# Build / render output
+dist
+build
+.out
+coverage
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.swp
+*.swo
+
+# Local env
+.env
+.env.local
+.env.*.local

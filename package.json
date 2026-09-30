@@ -1,0 +1,31 @@
+{
+  "name": "narrative-forge",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Narrative Forge — monorepo skeleton (Phase 1 scaffold).",
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.17",
+    "pnpm": ">=8.15.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@types/node": "^18.17.0",
+    "typescript": "5.3.3",
+    "vitest": "1.2.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome"
+    ]
+  }
+}
