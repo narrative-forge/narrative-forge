@@ -2,13 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
+    branches: [main]
+
+# 同分支取消旧 CI，避免资源浪费
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# CI 不跑视频渲染（太慢）；Remotion 浏览器下载也跳过
+env:
+  REMOTION_SKIP_BROWSER_DOWNLOAD: "1"
 
 jobs:
   verify:
     name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
+    # 硬性超时：lint + typecheck + test + build 须在 15 分钟内跑完
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,6 +34,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.17
+          # 仅缓存 pnpm store，不缓存 node_modules
           cache: pnpm
 
       - name: Install dependencies

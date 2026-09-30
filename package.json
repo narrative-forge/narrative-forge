@@ -15,10 +15,14 @@
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
+    "@changesets/cli": "^3.0.3",
     "@types/node": "^18.17.0",
     "typescript": "5.3.3",
     "vitest": "1.2.2"
