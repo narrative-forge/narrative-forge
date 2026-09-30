@@ -29,3 +29,6 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+
+# Delivery artifacts (Plan A source zips for the user to push)
+*.zip
