@@ -15,6 +15,7 @@
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write .",
+    "clean": "rm -rf packages/*/dist packages/*/*.tsbuildinfo tsconfig.tsbuildinfo",
     "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "changeset": "changeset",
     "version": "changeset version",
