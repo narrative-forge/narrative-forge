@@ -182,7 +182,7 @@ ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers
 
 # D3
 mkdir -p /tmp/frames
-ffmpeg -i /tmp/huining.mp4 -vf "select='eq(n\\,5)+eq(n\\,1470)+eq(n\\,2930)'" -vsync 0 /tmp/frames/frame-%d.png
+ffmpeg -i /tmp/huining.mp4 -vf "select='eq(n\,5)+eq(n\,1470)+eq(n\,2930)'" -vsync 0 /tmp/frames/frame-%d.png
 
 # D4（长期进程，验证后 Ctrl+C）
 node packages/cli/dist/index.js preview stories/demo/huining-1936.json --view main-timeline
