@@ -8,6 +8,8 @@
 
 import { run } from './cli';
 
+export const PACKAGE_NAME = '@forge/cli';
+
 run(process.argv.slice(2)).then(
   (code) => {
     process.exitCode = code;
