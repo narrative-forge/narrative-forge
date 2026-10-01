@@ -3,14 +3,14 @@ import type { ComponentType, FC } from 'react';
 import { Composition } from 'remotion';
 import huiningStory from '../../../stories/demo/huining-1936.json';
 import { TimelineComposition } from './TimelineComposition';
-import { prepareTimelineProps } from './prepare';
+import { TIMELINE_COMPOSITION_ID, prepareTimelineProps } from './prepare';
 
 /** Remotion 根：注册会宁会师时间线 composition。 */
 export const RemotionRoot: FC = () => {
   const props = prepareTimelineProps(huiningStory as unknown as Story, 'main-timeline', 30);
   return (
     <Composition
-      id="Timeline-huining"
+      id={TIMELINE_COMPOSITION_ID}
       // Remotion's <Composition> expects a loosely-typed component
       // (LooseComponentType<Record<string, unknown>>); the concrete props are
       // supplied via `defaultProps` (typed TimelineCompositionProps above).

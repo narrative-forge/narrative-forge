@@ -8,6 +8,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./prepare": {
+      "types": "./dist/prepare.d.ts",
+      "import": "./dist/prepare.js"
+    },
+    "./webpack-override": {
+      "types": "./dist/webpackOverride.d.ts",
+      "import": "./dist/webpackOverride.js"
     }
   },
   "scripts": {
