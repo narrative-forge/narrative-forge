@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { AbsoluteFill } from 'remotion';
-import { tokens } from './tokens';
+import { tokens } from './tokens.js';
 
 export interface TitleCardProps {
   /** 主标题，通常取自 story.meta.title */

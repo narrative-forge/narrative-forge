@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-
-import { frameToProgress } from './frame';
+import { frameToProgress } from './frame.js';
 
 describe('frameToProgress — invariants P18–P25', () => {
   it('P18: frameToProgress(0, N) === 0 for N >= 2', () => {

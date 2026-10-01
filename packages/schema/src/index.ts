@@ -6,6 +6,6 @@
  * `@forge/schema` and validate untrusted input with `StorySchema.parse`.
  */
 
-export * from './types';
-export * from './zod';
-export * from './version';
+export * from './types.js';
+export * from './zod.js';
+export * from './version.js';

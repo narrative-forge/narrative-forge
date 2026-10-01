@@ -11,7 +11,7 @@
  * goes through `@forge/render`, and Studio is launched as an external process.
  */
 
-import { accessSync, constants, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { constants, accessSync, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -49,7 +49,7 @@ const COMPOSITIONS_DIR = resolve(here, '..', '..', 'compositions');
  * pnpm binary used to launch Studio. Overridable because `pnpm` is not always
  * on PATH (CI images, nvm/corepack shells); defaults to plain `pnpm`.
  */
-const PNPM_BIN = process.env['FORGE_PNPM_BIN'] ?? 'pnpm';
+const PNPM_BIN = process.env.FORGE_PNPM_BIN ?? 'pnpm';
 
 /** CLI3: refuse early and loudly when the output path cannot be written. */
 function assertWritableOutput(outputPath: string): void {
@@ -99,7 +99,11 @@ async function renderCommand(
   }
 }
 
-async function previewCommand(storyPath: string, opts: { view: string }, io: CliIO): Promise<number> {
+async function previewCommand(
+  storyPath: string,
+  opts: { view: string },
+  io: CliIO
+): Promise<number> {
   // CLI5: an invalid story must fail *before* a long-running Studio starts.
   const story = loadStory(storyPath);
   const props = prepareTimelineProps(story, opts.view, story.meta.fps);

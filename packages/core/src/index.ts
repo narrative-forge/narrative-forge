@@ -6,6 +6,6 @@
  * layer (frameToProgress).
  */
 
-export { buildSchedule, locate } from './schedule';
-export type { Schedule, ScheduleOptions, ScheduleSegment, LocateResult } from './schedule';
-export { frameToProgress } from './frame';
+export { buildSchedule, locate } from './schedule.js';
+export type { LocateResult, Schedule, ScheduleOptions, ScheduleSegment } from './schedule.js';
+export { frameToProgress } from './frame.js';

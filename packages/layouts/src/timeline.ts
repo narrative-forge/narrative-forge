@@ -29,8 +29,7 @@
 import { locate } from '@forge/core';
 import type { Schedule } from '@forge/core';
 import type { Node } from '@forge/schema';
-
-import type { TimelineLayoutItem, TimelineLayoutOptions, TimelineLayoutResult } from './types';
+import type { TimelineLayoutItem, TimelineLayoutOptions, TimelineLayoutResult } from './types.js';
 
 const DEFAULT_PADDING_X = 80;
 

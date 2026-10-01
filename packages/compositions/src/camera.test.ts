@@ -1,6 +1,6 @@
 import type { TimelineLayoutResult } from '@forge/layouts';
 import { describe, expect, it } from 'vitest';
-import { smoothCamera } from './camera';
+import { smoothCamera } from './camera.js';
 
 /**
  * Build a minimal {@link TimelineLayoutResult} with `n` items placed at the

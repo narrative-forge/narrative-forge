@@ -2,14 +2,12 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { buildSchedule } from '@forge/core';
 import { bundle } from '@remotion/bundler';
 import { renderMedia, selectComposition } from '@remotion/renderer';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-
-import { loadStory } from './loadStory';
-import { renderStory } from './render';
+import { loadStory } from './loadStory.js';
+import { renderStory } from './render.js';
 
 // Remotion is mocked out: the unit tests cover the *pipeline* (loading,
 // validation, prop preparation, result metrics), not actual frame encoding.

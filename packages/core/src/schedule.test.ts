@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { StorySchema } from '@forge/schema';
 import type { Node } from '@forge/schema';
 
-import { buildSchedule, locate } from './schedule';
+import { buildSchedule, locate } from './schedule.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 

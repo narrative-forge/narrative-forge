@@ -1,6 +1,5 @@
 import { Config } from '@remotion/cli/config';
-
-import { forgeWebpackOverride } from './src/webpackOverride';
+import { forgeWebpackOverride } from './src/webpackOverride.js';
 
 Config.setVideoImageFormat('jpeg');
 Config.setOverwriteOutput(true);

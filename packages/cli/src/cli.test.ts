@@ -2,11 +2,9 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-
-import type { CliIO } from './cli';
-import { CLI_VERSION, run } from './cli';
+import { CLI_VERSION, run } from './cli.js';
+import type { CliIO } from './cli.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const HUINING = join(HERE, '..', '..', '..', 'stories', 'demo', 'huining-1936.json');

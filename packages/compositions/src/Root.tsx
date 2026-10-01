@@ -2,8 +2,8 @@ import type { Story } from '@forge/schema';
 import type { ComponentType, FC } from 'react';
 import { Composition } from 'remotion';
 import huiningStory from '../../../stories/demo/huining-1936.json';
-import { TimelineComposition } from './TimelineComposition';
-import { TIMELINE_COMPOSITION_ID, prepareTimelineProps } from './prepare';
+import { TimelineComposition } from './TimelineComposition.js';
+import { TIMELINE_COMPOSITION_ID, prepareTimelineProps } from './prepare.js';
 
 /** Remotion 根：注册会宁会师时间线 composition。 */
 export const RemotionRoot: FC = () => {

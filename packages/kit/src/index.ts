@@ -1,7 +1,7 @@
-export { tokens } from './tokens';
-export { TitleCard } from './TitleCard';
-export type { TitleCardProps } from './TitleCard';
-export { EventCard } from './EventCard';
-export type { EventCardProps } from './EventCard';
-export { Timeline } from './Timeline';
-export type { TimelineProps, TimelineNode } from './Timeline';
+export { tokens } from './tokens.js';
+export { TitleCard } from './TitleCard.js';
+export type { TitleCardProps } from './TitleCard.js';
+export { EventCard } from './EventCard.js';
+export type { EventCardProps } from './EventCard.js';
+export { Timeline } from './Timeline.js';
+export type { TimelineNode, TimelineProps } from './Timeline.js';

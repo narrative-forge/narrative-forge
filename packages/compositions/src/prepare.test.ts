@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Story } from '@forge/schema';
 import { describe, expect, it } from 'vitest';
-import { prepareTimelineProps } from './prepare';
+import { prepareTimelineProps } from './prepare.js';
 
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const huining = JSON.parse(
@@ -49,7 +49,9 @@ describe('prepareTimelineProps — P1–P5', () => {
   // gone, so nothing may read it. Guards against re-introducing a second
   // source of truth for playback length.
   it('P6: the demo view carries no seconds field — schedule is the only source', () => {
-    const view = huining.views.find((candidate: { id: string }) => candidate.id === 'main-timeline');
+    const view = huining.views.find(
+      (candidate: { id: string }) => candidate.id === 'main-timeline'
+    );
     expect(view).toBeDefined();
     expect(Object.keys(view as Record<string, unknown>)).not.toContain('duration');
     const props = prepareTimelineProps(huining, 'main-timeline', fps);

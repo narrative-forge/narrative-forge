@@ -39,6 +39,6 @@
     }
   },
   "files": {
-    "ignore": ["dist", "build", "coverage", "node_modules", "pnpm-lock.yaml"]
+    "ignore": ["dist", "build", "coverage", "node_modules", "pnpm-lock.yaml", ".pnpm-store"]
   }
 }

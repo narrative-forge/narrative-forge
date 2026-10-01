@@ -8,7 +8,6 @@
  */
 
 import { z } from 'zod';
-
 import {
   AssetIdSchema,
   AssetSchema,
@@ -19,7 +18,7 @@ import {
   StorySchema,
   TimeSchema,
   ViewSchema,
-} from './zod';
+} from './zod.js';
 
 export type Story = z.infer<typeof StorySchema>;
 export type Meta = z.infer<typeof MetaSchema>;

@@ -25,14 +25,13 @@
 import { mkdtempSync, rmSync, statSync } from 'node:fs';
 import { cpus, tmpdir } from 'node:os';
 import { join } from 'node:path';
-
 import { TIMELINE_COMPOSITION_ID, prepareTimelineProps } from '@forge/compositions/prepare';
 import { COMPOSITION_ENTRY, forgeWebpackOverride } from '@forge/compositions/webpack-override';
-import { bundle, type WebpackOverrideFn } from '@remotion/bundler';
+import { bundle } from '@remotion/bundler';
+import type { WebpackOverrideFn } from '@remotion/bundler';
 import { renderMedia, selectComposition } from '@remotion/renderer';
-
-import { loadStory } from './loadStory';
-import type { RenderOptions, RenderResult } from './types';
+import { loadStory } from './loadStory.js';
+import type { RenderOptions, RenderResult } from './types.js';
 
 /** Share of the progress bar given to webpack bundling. */
 const BUNDLE_PROGRESS_SHARE = 0.15;

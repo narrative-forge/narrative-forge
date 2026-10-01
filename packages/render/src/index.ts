@@ -7,7 +7,6 @@
  */
 
 export const PACKAGE_NAME = '@forge/render';
-
-export { loadStory } from './loadStory';
-export { renderStory } from './render';
-export type { RenderOptions, RenderResult } from './types';
+export { loadStory } from './loadStory.js';
+export { renderStory } from './render.js';
+export type { RenderOptions, RenderResult } from './types.js';

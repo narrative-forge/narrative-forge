@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { tokens } from './tokens';
+import { tokens } from './tokens.js';
 
 export interface EventCardProps {
   /** 节点标签（通常为 Node.label） */

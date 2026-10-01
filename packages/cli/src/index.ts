@@ -6,7 +6,7 @@
  * process exit code. All behaviour lives in `./cli` so it stays testable.
  */
 
-import { run } from './cli';
+import { run } from './cli.js';
 
 export const PACKAGE_NAME = '@forge/cli';
 

@@ -1,15 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-import { describe, expect, it } from 'vitest';
-
 import { buildSchedule } from '@forge/core';
-import { StorySchema } from '@forge/schema';
 import type { Node } from '@forge/schema';
-
-import { computeTimelineLayout } from './timeline';
-import type { TimelineLayoutOptions, TimelineLayoutResult } from './types';
+import { StorySchema } from '@forge/schema';
+import { describe, expect, it } from 'vitest';
+import { computeTimelineLayout } from './timeline.js';
+import type { TimelineLayoutOptions, TimelineLayoutResult } from './types.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 

@@ -1,11 +1,11 @@
 import { locate } from '@forge/core';
 import { EventCard, Timeline, TitleCard, tokens } from '@forge/kit';
-import { computeTimelineLayout } from '@forge/layouts';
 import type { TimelineLayoutResult } from '@forge/layouts';
+import { computeTimelineLayout } from '@forge/layouts';
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { smoothCamera } from './camera';
-import type { TimelineCompositionProps } from './prepare';
+import { smoothCamera } from './camera.js';
+import type { TimelineCompositionProps } from './prepare.js';
 
 /** 相机过渡帧数（30fps 下 0.5 秒），见 TASK-007 任务包。 */
 const TRANSITION_FRAMES = 15;

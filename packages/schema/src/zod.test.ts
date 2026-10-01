@@ -1,11 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { describe, expect, it } from 'vitest';
-
-import type { NodeId, Story } from './types';
-import { StorySchema } from './zod';
+import type { NodeId, Story } from './types.js';
+import { StorySchema } from './zod.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -113,14 +111,14 @@ describe('StorySchema — 0.1.1 breaking change (TASK-008 Step A)', () => {
   it('rejects the removed View seconds field, pointing at views.0.duration', () => {
     const raw = baseStory();
     const view = raw.views[0] as Record<string, unknown>;
-    view['duration'] = 30;
+    view.duration = 30;
     expect(issuePaths(raw)).toContain('views.0.duration');
   });
 
   it('does not silently strip the removed View seconds field', () => {
     const raw = baseStory();
     const view = raw.views[0] as Record<string, unknown>;
-    view['duration'] = 30;
+    view.duration = 30;
     expect(StorySchema.safeParse(raw).success).toBe(false);
   });
 
