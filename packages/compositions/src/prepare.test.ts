@@ -44,4 +44,15 @@ describe('prepareTimelineProps — P1–P5', () => {
     const second = prepareTimelineProps(huining, 'main-timeline', fps);
     expect(first).toEqual(second);
   });
+
+  // Schema 0.1.1 (TASK-008 Step A): the redundant per-view seconds field is
+  // gone, so nothing may read it. Guards against re-introducing a second
+  // source of truth for playback length.
+  it('P6: the demo view carries no seconds field — schedule is the only source', () => {
+    const view = huining.views.find((candidate: { id: string }) => candidate.id === 'main-timeline');
+    expect(view).toBeDefined();
+    expect(Object.keys(view as Record<string, unknown>)).not.toContain('duration');
+    const props = prepareTimelineProps(huining, 'main-timeline', fps);
+    expect(props.durationInFrames).toBe(Math.ceil(props.schedule.totalSec * fps));
+  });
 });

@@ -32,7 +32,9 @@ type RawStory = {
 function baseStory(): RawStory {
   return {
     meta: { title: 'T', resolution: '1920x1080', fps: 30 },
-    views: [{ id: 'v1', type: 'timeline', layout: 'horizontal', duration: 30 }],
+    // 0.1.1: `duration` no longer exists on a view — see the rejection test
+    // in "StorySchema — 0.1.1 breaking change" below.
+    views: [{ id: 'v1', type: 'timeline', layout: 'horizontal' }],
     nodes: [
       { id: 'n1', type: 'event', label: 'A', time: '1936-06-01' },
       { id: 'n2', type: 'event', label: 'B', time: '1936-07-01' },
@@ -104,5 +106,33 @@ describe('StorySchema — negative cases', () => {
     const raw = baseStory();
     raw.meta.fps = 25;
     expect(issuePaths(raw)).toContain('meta.fps');
+  });
+});
+
+describe('StorySchema — 0.1.1 breaking change (TASK-008 Step A)', () => {
+  it('rejects the removed View seconds field, pointing at views.0.duration', () => {
+    const raw = baseStory();
+    const view = raw.views[0] as Record<string, unknown>;
+    view['duration'] = 30;
+    expect(issuePaths(raw)).toContain('views.0.duration');
+  });
+
+  it('does not silently strip the removed View seconds field', () => {
+    const raw = baseStory();
+    const view = raw.views[0] as Record<string, unknown>;
+    view['duration'] = 30;
+    expect(StorySchema.safeParse(raw).success).toBe(false);
+  });
+
+  it('still accepts a view that carries no duration at all', () => {
+    const raw = baseStory();
+    expect(StorySchema.safeParse(raw).success).toBe(true);
+  });
+
+  it('parses the demo story after the View seconds field was deleted', () => {
+    const story = StorySchema.parse(loadHuining());
+    const view = story.views[0];
+    expect(view).toBeDefined();
+    expect(Object.keys(view ?? {})).not.toContain('duration');
   });
 });

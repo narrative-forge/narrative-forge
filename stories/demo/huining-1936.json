@@ -8,8 +8,7 @@
     {
       "id": "main-timeline",
       "type": "timeline",
-      "layout": "horizontal",
-      "duration": 30
+      "layout": "horizontal"
     }
   ],
   "nodes": [

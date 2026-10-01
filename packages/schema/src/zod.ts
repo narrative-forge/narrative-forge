@@ -79,7 +79,20 @@ export const ViewSchema = z.object({
   type: z.literal('timeline'),
   tracks: z.array(z.string()).optional(),
   layout: z.literal('horizontal').optional(),
-  duration: z.number().positive().optional(),
+
+  // REMOVED in Schema 0.1.1 (TASK-008 Step A, 裁定 1).
+  //
+  // `duration` used to declare how long a view plays, but the rhythm schedule
+  // produced by `buildSchedule` was always the real source of truth — the two
+  // disagreed on the 会宁 demo (declared 30s vs. computed 98.05s). Two sources
+  // of truth for one quantity is a permanent inconsistency, so the field is
+  // gone.
+  //
+  // It is declared as `z.never()` rather than simply deleted: a plain deletion
+  // would make Zod *silently strip* the key, so a legacy story still carrying
+  // `duration: 30` would validate clean and quietly keep its stale number.
+  // `never` turns that into a loud failure at path `views.N.duration`.
+  duration: z.never().optional(),
 });
 
 export const AssetSchema = z.object({

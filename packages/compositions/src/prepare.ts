@@ -9,6 +9,14 @@ import type { Schedule } from '@forge/core';
  */
 import type { Story } from '@forge/schema';
 
+/**
+ * Remotion composition id registered by `Root.tsx`.
+ *
+ * Exported so `@forge/render` can `selectComposition()` by id without
+ * hard-coding the same string twice (TASK-008 Step B).
+ */
+export const TIMELINE_COMPOSITION_ID = 'Timeline-huining' as const;
+
 export interface TimelineCompositionProps {
   story: Story;
   viewId: string;
@@ -26,12 +34,14 @@ export interface TimelineCompositionProps {
  * schedule from `story.nodes` → derive `durationInFrames` from the schedule
  * total and `fps` → read canvas dimensions from `meta.resolution`.
  *
- * Note on duration (P3/P4): the rhythm schedule is the source of truth for
- * playback length, so `durationInFrames = ceil(schedule.totalSec * fps)`. The
- * invariant P3 is therefore verified as *consistency* between `totalSec` and
- * the effective duration `durationInFrames / fps` (|Δ| < 1s). The demo's
- * `view.duration` (30s) is intentionally NOT used to truncate the schedule —
- * see TASK-007-report §6 for the deviation rationale.
+ * Note on duration (P3/P4): the rhythm schedule is the **only** source of
+ * truth for playback length, so `durationInFrames = ceil(schedule.totalSec *
+ * fps)`. P3 is therefore verified as *consistency* between `totalSec` and the
+ * effective duration `durationInFrames / fps` (|Δ| < 1s).
+ *
+ * Schema 0.1.1 (TASK-008 Step A) removed the redundant per-view seconds field
+ * from `View`; it was never read here, and trimming a schedule to a declared
+ * length would contradict "schedule is the sole source of truth".
  */
 export function prepareTimelineProps(
   story: Story,
