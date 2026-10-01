@@ -28,7 +28,7 @@ import { join } from 'node:path';
 
 import { TIMELINE_COMPOSITION_ID, prepareTimelineProps } from '@forge/compositions/prepare';
 import { COMPOSITION_ENTRY, forgeWebpackOverride } from '@forge/compositions/webpack-override';
-import { bundle } from '@remotion/bundler';
+import { bundle, type WebpackOverrideFn } from '@remotion/bundler';
 import { renderMedia, selectComposition } from '@remotion/renderer';
 
 import { loadStory } from './loadStory';
@@ -37,14 +37,12 @@ import type { RenderOptions, RenderResult } from './types';
 /** Share of the progress bar given to webpack bundling. */
 const BUNDLE_PROGRESS_SHARE = 0.15;
 
-type BundleOptions = NonNullable<Parameters<typeof bundle>[0]>;
-
 /**
  * `forgeWebpackOverride` is intentionally Remotion-agnostic (`unknown` in,
  * `unknown` out) so `@forge/compositions` does not depend on `@remotion/*`.
  * The cast adapts it to Remotion's `WebpackOverrideFn` at this boundary.
  */
-const webpackOverride = forgeWebpackOverride as unknown as BundleOptions['webpackOverride'];
+const webpackOverride = forgeWebpackOverride as unknown as WebpackOverrideFn;
 
 function defaultConcurrency(): number {
   return Math.max(1, Math.floor(cpus().length / 2));
@@ -80,7 +78,7 @@ export async function renderStory(options: RenderOptions): Promise<RenderResult>
     const base = await selectComposition({
       serveUrl,
       id: TIMELINE_COMPOSITION_ID,
-      inputProps: props,
+      inputProps: props as unknown as Record<string, unknown>,
     });
 
     // The registered composition carries the demo's own fps/size/duration;
@@ -94,7 +92,7 @@ export async function renderStory(options: RenderOptions): Promise<RenderResult>
       codec: 'h264',
       imageFormat: 'jpeg',
       outputLocation: options.outputPath,
-      inputProps: props,
+      inputProps: props as unknown as Record<string, unknown>,
       concurrency,
       overwrite: true,
       onProgress: ({ progress }) => {

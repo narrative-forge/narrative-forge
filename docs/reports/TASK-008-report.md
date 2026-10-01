@@ -182,7 +182,7 @@ ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers
 
 # D3
 mkdir -p /tmp/frames
-ffmpeg -i /tmp/huining.mp4 -vf "select='eq(n\,5)+eq(n\,1470)+eq(n\,2930)'" -vsync 0 /tmp/frames/frame-%d.png
+ffmpeg -i /tmp/huining.mp4 -vf "select='eq(n\\,5)+eq(n\\,1470)+eq(n\\,2930)'" -vsync 0 /tmp/frames/frame-%d.png
 
 # D4（长期进程，验证后 Ctrl+C）
 node packages/cli/dist/index.js preview stories/demo/huining-1936.json --view main-timeline
@@ -288,6 +288,18 @@ Buddy 明确指示「先推送」，故已分三笔提交推至 `master`（Step 
    若不接受，改用默认临时目录（那样就做不到"临时目录零残留"，需要另找清理点）。
 3. `selectComposition()` 的返回类型上覆盖 `fps / width / height / durationInFrames`
    是否类型兼容。
+
+**8.10 首次 `pnpm build` 实测错误与修复（2026-10-01）。**
+在装好依赖的机器上首次 `pnpm build`（`tsc -b`）精确复现了上面 3 处，全部位于
+`packages/render/src/render.ts`，已修复：
+
+| # | 错误（TS） | 根因 | 修复 |
+|---|---|---|---|
+| 1 | `Property 'webpackOverride' does not exist on type 'BundleOptions'`（line 47） | 用 `Parameters<typeof bundle>[0]` 推导出的类型取到了联合/末位重载，不含 `webpackOverride` 成员；而 `bundle({...webpackOverride})` 调用本身能过，说明该属性被接受，只是标注常量用的类型来源取错了 | 删除该别名；改从 `@remotion/bundler`（其 `index.d.ts` 已再导出 `WebpackOverrideFn`）引入 `WebpackOverrideFn`，cast 目标改为 `WebpackOverrideFn` |
+| 2 | `inputProps: props` 不能赋给 `Record<string, unknown>`（line 83，`selectComposition`） | `TimelineCompositionProps` 无索引签名（即 §8.9 风险①） | `props as unknown as Record<string, unknown>` |
+| 3 | `inputProps: props` 同上（line 97，`renderMedia`） | 同上 | 同上 |
+
+修复后 `pnpm build` 应通过；`lint`(biome) / `typecheck`(= `tsc -b`) / `test`(vitest) 待复跑确认（本机仍无法跑依赖，未经本地编译验证）。
 
 ---
 
