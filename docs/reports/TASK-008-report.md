@@ -301,6 +301,15 @@ Buddy 明确指示「先推送」，故已分三笔提交推至 `master`（Step 
 
 修复后 `pnpm build` 应通过；`lint`(biome) / `typecheck`(= `tsc -b`) / `test`(vitest) 待复跑确认（本机仍无法跑依赖，未经本地编译验证）。
 
+**8.11 第二次 `pnpm build` 复跑发现 CLI 包新错误与修复（2026-10-01）。**
+`render.ts` 的 3 个错误修完后重跑全链路 `pnpm clean && pnpm install && pnpm build`，`tsc -b` 又命中 1 个错误，位于 `packages/cli/src`：
+
+| # | 错误（TS） | 根因 | 修复 |
+|---|---|---|---|
+| 4 | `packages/cli/src/index.test.ts:2:10 - error TS2305: Module '"./index"' has no exported member 'PACKAGE_NAME'` | 脚手架遗留占位测试 `index.test.ts` 断言 `PACKAGE_NAME === '@forge/cli'`，而 TASK-008 写 `index.ts`（bin 入口）时只导出了 `run` 的薄壳，未导出 `PACKAGE_NAME` —— 与 8.10 之前 render 包的坑完全对称 | 给 `packages/cli/src/index.ts` 加 `export const PACKAGE_NAME = '@forge/cli';`（与 render 的 `export const PACKAGE_NAME = '@forge/render'` 同构）；并将 master 上已有的 `index.test.ts` 同步回本机工作副本，使主本与远端一致 |
+
+注：本次 build 仍在 `packages/cli` 阶段中断，`lint` / `typecheck` / `test` 未执行。修复后预期 `pnpm build` 通过，仍需在可用环境复跑全链路确认。
+
 ---
 
 ## 9. Phase 1 完成声明
