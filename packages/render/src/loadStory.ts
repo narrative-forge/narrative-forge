@@ -16,7 +16,6 @@ import type { Story } from '@forge/schema';
 function failMissing(storyPath: string): never {
   throw new Error(`story file not found: ${storyPath}`);
 }
-
 /**
  * Read and validate a story.json file.
  *

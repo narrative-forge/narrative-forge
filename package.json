@@ -19,7 +19,8 @@
     "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "forge": "node packages/cli/dist/index.js"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",

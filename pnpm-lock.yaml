@@ -1258,24 +1258,28 @@ packages:
     resolution: {integrity: sha512-2sHLT4e0BP9vSFWPhylX4tWHL3VC3eAl90SdcgN6ZA3dU/XcMDYwW+ceYhdeM7Ryh5dOXkqhLLN/HoyJrfwegA==}
     cpu: [arm64]
     os: [linux]
+    dev: true
     optional: true
 
   /@remotion/compositor-linux-arm64-musl@4.0.530:
     resolution: {integrity: sha512-eqYokUW0SyqK6YnjJivh6v6JFqpvgCnqniVZULM8o7f/wBB8sxDOtNuk8Jy0VISPgBFtVVKDdt9smFTNbeO3dQ==}
     cpu: [arm64]
     os: [linux]
+    dev: true
     optional: true
 
   /@remotion/compositor-linux-x64-gnu@4.0.530:
     resolution: {integrity: sha512-Gn6d7zenyWrkZumMLBwUWg73wVcRe554EYEFdz/SvpglqCgLlOSpA/lBrCp9hU05QXCPyOpMzWXo6BCrLx7wqg==}
     cpu: [x64]
     os: [linux]
+    dev: true
     optional: true
 
   /@remotion/compositor-linux-x64-musl@4.0.530:
     resolution: {integrity: sha512-8/l0t9P0zX2rd8Ootp7iUJy0u08Ce5KexG8YJI7VRYseqcKkuZnvOFts4SKKC+nGKEf9CeWYVQjsN7dj/rXnJA==}
     cpu: [x64]
     os: [linux]
+    dev: true
     optional: true
 
   /@remotion/compositor-win32-x64-msvc@4.0.530:
@@ -1698,24 +1702,28 @@ packages:
     resolution: {integrity: sha512-P0QrGRPbTWu6RKWfN0bDtbnEps3rXH0MWIMreZABoUrVmNQKtXR6e73J3ub6a+di5s2+K0M2LJ9Bh2/H4UsDUA==}
     cpu: [arm64]
     os: [linux]
+    dev: true
     optional: true
 
   /@rspack/binding-linux-arm64-musl@1.7.11:
     resolution: {integrity: sha512-6ky7R43VMjWwmx3Yx7Jl7faLBBMAgMDt+/bN35RgwjiPgsIByz65EwytUVuW9rikB43BGHvA/eqlnjLrUzNBqw==}
     cpu: [arm64]
     os: [linux]
+    dev: true
     optional: true
 
   /@rspack/binding-linux-x64-gnu@1.7.11:
     resolution: {integrity: sha512-cuOJMfCOvb2Wgsry5enXJ3iT1FGUjdPqtGUBVupQlEG4ntSYsQ2PtF4wIDVasR3wdxC5nQbipOrDiN/u6fYsdQ==}
     cpu: [x64]
     os: [linux]
+    dev: true
     optional: true
 
   /@rspack/binding-linux-x64-musl@1.7.11:
     resolution: {integrity: sha512-CoK37hva4AmHGh3VCsQXmGr40L36m1/AdnN5LEjUX6kx5rEH7/1nEBN6Ii72pejqDVvk9anEROmPDiPw10tpFg==}
     cpu: [x64]
     os: [linux]
+    dev: true
     optional: true
 
   /@rspack/binding-wasm32-wasi@1.7.11:
