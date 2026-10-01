@@ -1,7 +1,19 @@
-// @forge/cli — placeholder scaffold.
-//
-// Part of the Narrative Forge monorepo. No business logic is
-// implemented in this skeleton phase; this export exists so the
-// package compiles, emits a declaration, and resolves via its
-// `exports` map.
-export const PACKAGE_NAME = '@forge/cli' as const;
+#!/usr/bin/env node
+/**
+ * @forge/cli — bin entry point.
+ *
+ * Thin wrapper: forwards argv to `run()` and maps its return value onto the
+ * process exit code. All behaviour lives in `./cli` so it stays testable.
+ */
+
+import { run } from './cli';
+
+run(process.argv.slice(2)).then(
+  (code) => {
+    process.exitCode = code;
+  },
+  (error: unknown) => {
+    process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  }
+);
