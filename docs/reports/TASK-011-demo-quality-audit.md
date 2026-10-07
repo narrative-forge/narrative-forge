@@ -78,12 +78,18 @@ introSec 0.8   outroSec 1.0   baseSec 10   perCharSec 0.05
 |---|---|---|---|
 | 分辨率 | `meta.resolution: "1920x1080"` | 1920x1080 | ✅ |
 | 帧率 | `fps: 30` | 30/1 | ✅ |
-| 时长 | `schedule.totalSec = 98.067` → `durationInFrames = 2942` | 98.066667 s | ✅ |
+| 时长 | `schedule.totalSec = 98.050` → `durationInFrames = 2942` | 98.066667 s | ✅ |
 | 编码 | Remotion 默认 h264 | h264 | ✅ |
 | 文件 | — | 2,672,965 B / 218 kbps | ✅ 体积正常 |
 
-复算：`totalSec = 0.8 + Σ(10 + 0.05×(label+desc).length) + 1.0 = 98.067`；
-`ceil(98.067 × 30) = 2942` — 与 MP4 实测时长误差 < 1 ms。
+复算：`totalSec = 0.8 + Σ(10 + 0.05×(label+desc).length) + 1.0 = 98.050`；
+`ceil(98.050 × 30) = ceil(2941.5) = 2942`。MP4 的 98.066667 s 就是 `2942 / 30`，
+即**帧数取整后**的容器时长，与调度值相差半帧（0.0167 s），属正常，不是缺陷。
+
+> **修订（2026-10-07，TASK-012 期间）**：本节初稿把 ffprobe 读到的容器时长
+> `98.067` 误写成了 `schedule.totalSec`。调度值是 **98.050**，容器值是
+> `2942 / 30 = 98.067` —— 两者来源不同（一个是节奏函数，一个是帧数），
+> 不应混用。§3.11 与 §7 复算脚本中的同一处笔误已一并更正。
 
 ### 2.2 其余四项自检
 
@@ -285,7 +291,7 @@ function lerp(a, b, t) { return a + (b - a) * t; }
 ### 3.11 每屏静置 **12 秒**，全程零动效
 
 ```
-每节点时长 = (98.067 − 0.8 − 1.0) / 8 = 12.03 s
+每节点时长 = (98.050 − 0.8 − 1.0) / 8 = 12.031 s
 ```
 
 98 秒里，画面的**唯一**变化是：水平匀速平移（每 12 秒一次）+ 卡片透明度切换。
@@ -424,7 +430,7 @@ console.log("间距",s.toFixed(2),"fitScale",Math.min(1,s/CARD).toFixed(4));
 console.log("非活动卡有效宽",(CARD*Math.min(1,s/CARD)).toFixed(2),"→ 间隙",(s-CARD*Math.min(1,s/CARD)).toFixed(2));
 console.log("活动卡溢出间距",(CARD-s).toFixed(2),"→ 每侧压邻居",((CARD-s)/2).toFixed(2));
 console.log("内容带占屏",((432-252)/1080*100).toFixed(1)+"%","→ 空载",(100-(432-252)/1080*100).toFixed(1)+"%");
-console.log("每节点时长",((98.067-1.8)/8).toFixed(2),"s");'
+console.log("每节点时长",((98.050-1.8)/8).toFixed(2),"s");'
 ```
 
 ---

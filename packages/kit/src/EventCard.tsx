@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { interpolateColor } from './color.js';
 import { tokens } from './tokens.js';
 
 export interface EventCardProps {
@@ -8,8 +9,15 @@ export interface EventCardProps {
   description?: string;
   /** 是否关键节点：金色边框 + 光晕 + 金色标签 */
   featured: boolean;
-  /** 是否为当前活动节点：浅色边框强调 */
-  active: boolean;
+  /**
+   * 活跃度 [0, 1]，由渲染层按过渡帧逐帧给出（TASK-012）。
+   * 1 = 当前活动节点；0 = 完全非活动；中间值用于交叉过渡。
+   *
+   * TASK-007 时这里是布尔 `active`，边框色因此在**单帧内**从 `foreground`
+   * 跳到 `timelineLine`。实测那是全片最大的一次帧间突变（3.14，见
+   * `docs/reports/TASK-012-smoothness-report.md`）。
+   */
+  activeAmount?: number;
   /**
    * 缩放系数（默认 1）。由宿主根据节点间距计算，保证相邻卡片不重叠：
    * Phase 1 在 1920×8 节点下间距 ≈251px < 卡宽 320px，需缩小到 ≈0.78。
@@ -26,14 +34,12 @@ export const EventCard: FC<EventCardProps> = ({
   label,
   description,
   featured,
-  active,
+  activeAmount = 0,
   scale = 1,
 }) => {
   const borderColor = featured
     ? tokens.color.accent
-    : active
-      ? tokens.color.foreground
-      : tokens.color.timelineLine;
+    : interpolateColor(tokens.color.timelineLine, tokens.color.foreground, activeAmount);
 
   return (
     <div

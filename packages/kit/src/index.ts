@@ -1,4 +1,5 @@
 export { tokens } from './tokens.js';
+export { interpolateColor } from './color.js';
 export { TitleCard } from './TitleCard.js';
 export type { TitleCardProps } from './TitleCard.js';
 export { EventCard } from './EventCard.js';
