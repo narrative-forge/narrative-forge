@@ -21,6 +21,7 @@
 | 环境限制 ③：本机 Chrome 冷启动 14.5 s，逼近 Remotion 硬编码的 25 s 连接上限 | ⚠️ 内存紧张时会超时，属机器状态而非代码缺陷（§4.3） |
 | 端到端 MP4 | ✅ 已产出：2942 帧 / 1920×1080 / 98.07 s / 2,672,965 B，ffprobe 独立复验一致（§3.4） |
 | 四条链（lint / typecheck / test / build） | ✅ 全部退出码 0；测试 10 文件 / 93 用例全过（§3.5） |
+| 远端 CI（GitHub Actions #25） | ✅ `success`，34 s（§3.6） |
 
 ---
 
@@ -258,6 +259,27 @@ ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,nb_fr
 关于 lint 的一个如实说明：它输出 4 条 `lint/style/noNonNullAssertion`，**全部集中在 `packages/core/src/schedule.test.ts`**（本任务未改动的文件），是既存写法。该规则在 `biome.json` 里配为 **warn**，因此不影响退出码；本次改动的文件零告警。
 
 > 上一次跑这条链时 `packages/cli` 的二进制冒烟测试超时失败（`Test timed out in 5000ms`）。单独重跑该文件 6 个用例 1.95 s 全过 —— 那是整包并发跑在这台机器上的**负载抖动**（node 冷启动实测 1.25 s，5 s 预算本应够），与代码无关。本次在渲染结束后、机器空闲时重跑，93 个用例一次全过，印证了这一点。
+
+### 3.6 远端 CI
+
+改动已推送到 `narrative-forge/narrative-forge` 的 `master`（`22dadae..46feb5a`，快进，未覆盖历史），GitHub Actions 随即跑完：
+
+| 项 | 值 |
+|---|---|
+| Run | CI #25（`actions/runs/37638032688`） |
+| Commit | `46feb5a` |
+| Job | `Lint · Typecheck · Test · Build` |
+| **conclusion** | **`success`** |
+| 耗时 | 34 s（`14:35:56Z → 14:36:25Z`） |
+
+CI 的 `Install` 走 `pnpm install --frozen-lockfile`。本任务**没有新增任何依赖**，并且刻意**没有**把根 `package.json` 里那条引导产物 `"dependencies": { "pnpm": "^12.8.1" }` 与其连带的 123 行 `pnpm-lock.yaml` 一起提交（那是沙箱的临时手段，不是项目契约）—— 所以 lockfile 与 package.json 保持本来就一致的状态，不会撞上本项目历史上反复出现的那类 Install 失败。
+
+两条 annotation 都是**运行器环境级提示**，与本次改动无关，仅备查：
+
+- `warning`：Node.js 20 已弃用，`actions/checkout@v4` / `actions/setup-node@v4` / `pnpm/action-setup@v2` 被强制跑在 Node.js 24 上。
+- `notice`：`ubuntu-latest` 将于 2026-10-19 起迁移到 Ubuntu 26。
+
+（这两条不阻塞 CI；若想清掉，是后续单独升级那几个 action 版本的事，不属于本任务范围。）
 
 ---
 
