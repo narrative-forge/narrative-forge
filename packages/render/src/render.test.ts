@@ -2,22 +2,38 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CHROME_EXECUTABLE_ENV } from '@forge/compositions/chrome';
 import { buildSchedule } from '@forge/core';
 import { bundle } from '@remotion/bundler';
-import { renderMedia, selectComposition } from '@remotion/renderer';
+import { openBrowser, renderMedia, selectComposition } from '@remotion/renderer';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { loadStory } from './loadStory.js';
 import { renderStory } from './render.js';
 
 // Remotion is mocked out: the unit tests cover the *pipeline* (loading,
 // validation, prop preparation, result metrics), not actual frame encoding.
-// R4 (file on disk) and R6 (determinism) are proven by the manual end-to-end
-// run in TASK-008-report.md Step D, as the task package prescribes.
+// R4 (file on disk) and R6 (determinism) are covered by the real end-to-end
+// run recorded in TASK-009-report.md — this machine renders with the locally
+// installed Chrome and a local FFmpeg, so the tests stay hermetic while the
+// end-to-end proof lives outside them.
 vi.mock('@remotion/bundler', () => ({
-  bundle: vi.fn(async (_options?: unknown) => '/tmp/forge-fake-serve-url'),
+  bundle: vi.fn(async (options?: { onProgress?: (progress: number) => void }) => {
+    // Mirror Remotion's **0-100** bundling scale, so renderStory's
+    // normalisation to [0, 1] is genuinely exercised rather than assumed.
+    options?.onProgress?.(0);
+    options?.onProgress?.(12.34);
+    options?.onProgress?.(100);
+    return '/tmp/forge-fake-serve-url';
+  }),
 }));
 
 vi.mock('@remotion/renderer', () => ({
+  // renderStory keeps one browser instance for the whole run (selectComposition
+  // + renderMedia) — see the module docstring in render.ts.
+  openBrowser: vi.fn(async () => ({
+    close: vi.fn(async () => undefined),
+    newPage: vi.fn(async () => ({ close: vi.fn(async () => undefined) })),
+  })),
   selectComposition: vi.fn(async (_options?: unknown) => ({
     id: 'Timeline-huining',
     width: 1920,
@@ -37,17 +53,31 @@ vi.mock('@remotion/renderer', () => ({
 const bundleMock = vi.mocked(bundle);
 const selectCompositionMock = vi.mocked(selectComposition);
 const renderMediaMock = vi.mocked(renderMedia);
+const openBrowserMock = vi.mocked(openBrowser);
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const HUINING = join(HERE, '..', '..', '..', 'stories', 'demo', 'huining-1936.json');
 
 let workDir: string;
+let previousChromeOverride: string | undefined;
 
 beforeAll(() => {
   workDir = mkdtempSync(join(tmpdir(), 'forge-render-test-'));
+
+  // Browser resolution only checks that the configured path *exists* and the
+  // mocked renderer never launches it, so pointing the override at the running
+  // Node binary keeps this suite hermetic — no test run should depend on
+  // whether the machine (or the CI image) happens to have Chrome installed.
+  previousChromeOverride = process.env[CHROME_EXECUTABLE_ENV];
+  process.env[CHROME_EXECUTABLE_ENV] = process.execPath;
 });
 
 afterAll(() => {
+  if (previousChromeOverride === undefined) {
+    delete process.env[CHROME_EXECUTABLE_ENV];
+  } else {
+    process.env[CHROME_EXECUTABLE_ENV] = previousChromeOverride;
+  }
   rmSync(workDir, { recursive: true, force: true });
 });
 
@@ -153,5 +183,70 @@ describe('renderStory — R3 / R5 / progress', () => {
       expect(value).toBeLessThanOrEqual(1);
     }
     expect(seen.at(-1)).toBe(1);
+
+    // The mocked bundle reports 0-100; the first value must already be scaled
+    // into the bundle stage's share of the bar, not passed through raw.
+    expect(seen[0]).toBeLessThanOrEqual(0.15);
+  });
+
+  it('opens one browser and reuses it for selection and rendering', async () => {
+    openBrowserMock.mockClear();
+    selectCompositionMock.mockClear();
+    renderMediaMock.mockClear();
+
+    await renderStory({
+      storyPath: HUINING,
+      viewId: 'main-timeline',
+      outputPath: join(workDir, 'huining4.mp4'),
+    });
+
+    expect(openBrowserMock).toHaveBeenCalledTimes(1);
+    const browser = await openBrowserMock.mock.results[0]?.value;
+    const selectArgs = selectCompositionMock.mock.calls[0]?.[0] as {
+      puppeteerInstance?: unknown;
+    };
+    const mediaArgs = renderMediaMock.mock.calls[0]?.[0] as { puppeteerInstance?: unknown };
+    expect(selectArgs.puppeteerInstance).toBe(browser);
+    expect(mediaArgs.puppeteerInstance).toBe(browser);
+  });
+
+  it('passes a caller-supplied delayRender budget to selection and rendering', async () => {
+    selectCompositionMock.mockClear();
+    renderMediaMock.mockClear();
+
+    await renderStory({
+      storyPath: HUINING,
+      viewId: 'main-timeline',
+      outputPath: join(workDir, 'huining5.mp4'),
+      timeoutInMilliseconds: 45_000,
+    });
+
+    const selectArgs = selectCompositionMock.mock.calls[0]?.[0] as {
+      timeoutInMilliseconds?: number;
+    };
+    const mediaArgs = renderMediaMock.mock.calls[0]?.[0] as { timeoutInMilliseconds?: number };
+    expect(selectArgs.timeoutInMilliseconds).toBe(45_000);
+    expect(mediaArgs.timeoutInMilliseconds).toBe(45_000);
+  });
+
+  it('defaults the delayRender budget above the 30s Remotion default', async () => {
+    selectCompositionMock.mockClear();
+    renderMediaMock.mockClear();
+
+    await renderStory({
+      storyPath: HUINING,
+      viewId: 'main-timeline',
+      outputPath: join(workDir, 'huining6.mp4'),
+    });
+
+    const selectArgs = selectCompositionMock.mock.calls[0]?.[0] as {
+      timeoutInMilliseconds?: number;
+    };
+    const mediaArgs = renderMediaMock.mock.calls[0]?.[0] as { timeoutInMilliseconds?: number };
+
+    // Both stages must share one budget: page setup and per-frame rendering are
+    // equally exposed on a slow machine.
+    expect(selectArgs.timeoutInMilliseconds).toBe(mediaArgs.timeoutInMilliseconds);
+    expect(selectArgs.timeoutInMilliseconds).toBeGreaterThan(30_000);
   });
 });

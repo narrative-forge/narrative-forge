@@ -16,6 +16,14 @@
     "./webpack-override": {
       "types": "./dist/webpackOverride.d.ts",
       "import": "./dist/webpackOverride.js"
+    },
+    "./chrome": {
+      "types": "./dist/chrome.d.ts",
+      "import": "./dist/chrome.js"
+    },
+    "./ffmpeg": {
+      "types": "./dist/ffmpeg.d.ts",
+      "import": "./dist/ffmpeg.js"
     }
   },
   "scripts": {
