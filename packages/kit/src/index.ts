@@ -1,8 +1,15 @@
 export { tokens } from './tokens.js';
 export { interpolateColor } from './color.js';
+export { formatFullDate, formatYearMonth, formatTimeRange } from './time.js';
 export { TitleCard } from './TitleCard.js';
 export type { TitleCardProps } from './TitleCard.js';
 export { EventCard } from './EventCard.js';
 export type { EventCardProps } from './EventCard.js';
 export { Timeline } from './Timeline.js';
 export type { TimelineNode, TimelineProps } from './Timeline.js';
+export { Backdrop } from './Backdrop.js';
+export type { BackdropProps } from './Backdrop.js';
+export { SubtitleBar } from './SubtitleBar.js';
+export type { SubtitleBarProps } from './SubtitleBar.js';
+export { StoryHeader } from './StoryHeader.js';
+export type { StoryHeaderProps } from './StoryHeader.js';
