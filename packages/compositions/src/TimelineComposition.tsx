@@ -1,5 +1,15 @@
 import { locate } from '@forge/core';
-import { EventCard, Timeline, TitleCard, tokens } from '@forge/kit';
+import {
+  Backdrop,
+  EventCard,
+  StoryHeader,
+  SubtitleBar,
+  Timeline,
+  TitleCard,
+  formatTimeRange,
+  formatYearMonth,
+  tokens,
+} from '@forge/kit';
 import type { TimelineLayoutResult } from '@forge/layouts';
 import { computeTimelineLayout } from '@forge/layouts';
 import type { FC } from 'react';
@@ -17,6 +27,14 @@ import type { TimelineCompositionProps } from './prepare.js';
 const TRANSITION_FRAMES = 24;
 
 /**
+ * 卡片相对节点间距的"呼吸系数"。
+ *
+ * 卡片宽度若恰好等于间距，8 张卡会连成一堵没有缝隙的墙（TASK-011 §3.2）。
+ * 乘 0.92 留出约 8% 的间隙。
+ */
+const CARD_BREATH = 0.92;
+
+/**
  * 时间线主组件。消费 TASK-006 的纯数据布局输出，在渲染层用 `smoothCamera`
  * 补偿"无插值"相机带来的跳切（ADR-004：布局层给确定性目标位置，渲染层平滑）。
  *
@@ -25,18 +43,17 @@ const TRANSITION_FRAMES = 24;
  * props 传入），不使用任何 Node IO。相机切换点通过 `locate` + `segments`
  * 的段起点推导，不缓存可变状态。
  *
- * 视觉编排：intro/outro 阶段整屏标题卡（事件卡不叠在标题上）；内容阶段
- * 时间轴 + 事件卡。事件卡按节点间距自适应缩放（fitScale），保证相邻卡片
- * 不重叠 —— 1920 宽 × 8 节点时间距 ≈251px，卡宽 320px，缩放 ≈0.78。
+ * 视觉编排（TASK-013 版式）：三段式版式 —— 上部标题/年份区（`StoryHeader`）、
+ * 中部时间轴区（`Timeline` + `EventCard`）、下部字幕区（`SubtitleBar`），
+ * 底层是 `Backdrop`。原实现只有一个 `timelineY = height * 0.6` 的硬编码
+ * 比例，垂直方向没有任何版式设计，实测 **83.3% 的画面是空载**
+ * （TASK-011 §3.1）。
  *
  * TASK-012（平滑度）：切换时刻的一切"强调"都改为**连续量**而非布尔量。
- * 原先 `active` 在单帧内同时翻转四件事 —— 卡片透明度（1.0↔0.4）、边框色
- * （`foreground`↔`timelineLine`）、圆点尺寸（18↔12px）、圆点光晕（有↔无）——
- * 实测这是全片最刺眼的帧间突变。现在统一由 `activeAmount ∈ [0,1]` 驱动，
- * 与相机共用 `easeInOutCubic` 曲线。
+ * 现在统一由 `activeAmount ∈ [0,1]` 驱动，与相机共用 `easeInOutCubic` 曲线。
  */
 export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
-  const { story, schedule, width, height, fps } = props;
+  const { story, schedule, width, height, fps, durationInFrames } = props;
   const frame = useCurrentFrame();
   const tSec = frame / fps;
 
@@ -66,11 +83,6 @@ export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
 
   const layout = smoothCamera(currentLayout, previousLayout, framesSinceSwitch, TRANSITION_FRAMES);
 
-  // TASK-012：把"活跃度"从布尔提升为 [0, 1] 连续量，供 kit 做边框色与圆点的
-  // 交叉过渡。它与 `smoothCamera` 里的 opacity 共用同一条 `easeInOutCubic`
-  // 曲线 —— 这是"亮起来"与"滑到位"读起来像一个动作、而不是两段各走各的
-  // 动画的原因。`framesSinceSwitch` 为 `Infinity`（intro/outro 或稳态）时
-  // `transitionProgress` 收敛到 1，回到与 TASK-007 相同的表现。
   const transitionProgress = easeInOutCubic(Math.min(framesSinceSwitch / TRANSITION_FRAMES, 1));
   const previousActiveId = previousLayout.activeNodeId;
   const activeAmountOf = (id: string): number => {
@@ -85,29 +97,78 @@ export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
   const isIntro = tSec < schedule.introSec;
   const isOutro = tSec > schedule.totalSec - schedule.outroSec;
 
+  // 年份区间由数据推导，取代原先硬编码的 '1934 — 1936'（TASK-011 §3.12：
+  // 数据首节点是 1935-10-19，画面上的 1934 在故事里不存在）。
+  const timeRange = formatTimeRange(nodes.map((node) => node.time));
+
+  // 背景图：meta.backdrop 引用 assets 里的 image 资产。demo 的 assets 为空，
+  // 此时 Backdrop 降级为程序化渐变背景（见 kit/Backdrop.tsx）。
+  const backdropId = story.meta.backdrop;
+  const backdropAsset =
+    backdropId === undefined
+      ? undefined
+      : story.assets.find((asset) => asset.id === backdropId && asset.type === 'image');
+
   if (isIntro || isOutro) {
     return (
       <AbsoluteFill
         style={{ backgroundColor: tokens.color.background, fontFamily: tokens.font.family }}
       >
-        <TitleCard
-          title={story.meta.title}
-          subtitle={isIntro ? '1934 — 1936 · 长征会师' : '—— 完 ——'}
+        <Backdrop
+          src={backdropAsset?.src}
+          frame={frame}
+          totalFrames={durationInFrames}
+          width={width}
+          height={height}
         />
+        <TitleCard title={story.meta.title} subtitle={isIntro ? timeRange : '—— 完 ——'} />
       </AbsoluteFill>
     );
   }
 
-  // 内容阶段：事件卡缩放至贴合节点间距，避免相邻卡片重叠。
+  // 内容阶段：所有卡片共用同一缩放系数（活动卡不再放大）。
+  //
+  // TASK-011 §3.2 实测：原实现 `scale = isActive ? 1 : fitScale`，活动卡保持
+  // 320px 而间距只有 251px → **向左、右各压住邻居 34.29px**，标题被切掉。
+  // 焦点改由边框亮度、金色光晕与卡片背景提亮表达（`EventCard`），尺寸不再
+  // 是层级手段 —— 这也顺带消除了 §3.3 的"纵向错落 19.3px"（所有卡片同尺寸，
+  // 缩放不再改变各自的中心偏移）。
   const itemCount = layout.items.length;
   const span = layout.timeline.x1 - layout.timeline.x0;
   const spacing = itemCount > 1 ? span / (itemCount - 1) : width;
-  const fitScale = Math.min(1, spacing / tokens.spacing.eventCardWidth);
+  const fitScale = Math.min(1, spacing / tokens.spacing.eventCardWidth) * CARD_BREATH;
+
+  // 字幕条：切换时"淡出 → 换字 → 淡入"。
+  //
+  // 直接按布尔切换会在单帧内换掉整段文字，那是 TASK-012 已清掉的硬跳类型。
+  // 这里 opacity 走 |2p − 1|：p = 0 / 1 时全显，p = 0.5 时全隐；过半后
+  // 内容切到新节点，于是换字发生在"看不见"的那一帧。
+  const switching = Number.isFinite(framesSinceSwitch) && framesSinceSwitch < TRANSITION_FRAMES;
+  const subtitleFade = switching ? Math.abs(2 * transitionProgress - 1) : 1;
+  const subtitleId =
+    switching && transitionProgress < 0.5 && previousActiveId !== null
+      ? previousActiveId
+      : (activeId ?? previousActiveId);
+  const subtitleNode = nodes.find((node) => node.id === subtitleId);
+  const subtitleText =
+    typeof subtitleNode?.metadata?.description === 'string'
+      ? subtitleNode.metadata.description
+      : undefined;
 
   return (
     <AbsoluteFill
       style={{ backgroundColor: tokens.color.background, fontFamily: tokens.font.family }}
     >
+      <Backdrop
+        src={backdropAsset?.src}
+        frame={frame}
+        totalFrames={durationInFrames}
+        width={width}
+        height={height}
+      />
+
+      <StoryHeader title={story.meta.title} range={timeRange} />
+
       <Timeline
         x0={layout.timeline.x0}
         x1={layout.timeline.x1}
@@ -120,6 +181,7 @@ export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
             y: item.y,
             activeAmount: activeAmountOf(item.id),
             featured: node?.featured ?? false,
+            year: formatYearMonth(node?.time),
           };
         })}
       />
@@ -128,17 +190,6 @@ export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
         .filter((item) => item.visible)
         .map((item) => {
           const node = nodes.find((candidate) => candidate.id === item.id);
-          const label = node?.label ?? item.id;
-          const rawDescription = node?.metadata?.description;
-          const description = typeof rawDescription === 'string' ? rawDescription : undefined;
-          const featured = node?.featured ?? false;
-          // 活动卡保持原尺寸（焦点强调），非活动卡缩放至间距宽度。
-          // TASK-012：`scale` 也必须是连续量。它原先是布尔驱动
-          // （`isActive ? 1 : fitScale`，即 320px ↔ 251.43px），会在单帧内跳掉
-          // **21.4% 的卡片面积** —— 这是 opacity / 边框色 / 圆点都改成连续量之后
-          // *残留的最后一处硬跳*：实测该帧的帧差仍有 1.49，而同期纯相机移动
-          // 只有 0.33。改用 `activeAmount` 后它与其余全部强调共享同一条缓动曲线。
-          const scale = fitScale + (1 - fitScale) * activeAmountOf(item.id);
           return (
             <div
               key={item.id}
@@ -151,15 +202,23 @@ export const TimelineComposition: FC<TimelineCompositionProps> = (props) => {
               }}
             >
               <EventCard
-                label={label}
-                description={description}
-                featured={featured}
+                label={node?.label ?? item.id}
+                time={node?.time}
+                featured={node?.featured ?? false}
                 activeAmount={activeAmountOf(item.id)}
-                scale={scale}
+                scale={fitScale}
               />
             </div>
           );
         })}
+
+      <SubtitleBar
+        title={subtitleNode?.label ?? ''}
+        text={subtitleText}
+        opacity={subtitleFade}
+        width={width}
+        top={height * 0.72}
+      />
     </AbsoluteFill>
   );
 };

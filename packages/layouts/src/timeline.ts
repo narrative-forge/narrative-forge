@@ -31,7 +31,40 @@ import type { Schedule } from '@forge/core';
 import type { Node } from '@forge/schema';
 import type { TimelineLayoutItem, TimelineLayoutOptions, TimelineLayoutResult } from './types.js';
 
-const DEFAULT_PADDING_X = 80;
+/**
+ * 水平内边距。
+ *
+ * 原为 80，此时 8 节点的间距 = (1920 − 160) / 7 = **251.43px**，而卡片宽
+ * 320px —— 非活动卡缩放到贴合间距后**相邻间隙恰好为 0px**，8 张卡连成一堵
+ * 没有呼吸的文字墙（TASK-011 §3.2 附带问题）。
+ *
+ * 120 把间距压到 240px，配合渲染层 0.92 的呼吸系数与收窄后的 260px 卡宽，
+ * 实际间隙约 19px。
+ */
+const DEFAULT_PADDING_X = 120;
+
+/**
+ * 时间轴在画布上的相对高度。
+ *
+ * 原为 `height * 0.6`：卡片带（高 180）落在 y = 252–432，**上方 23.3%、
+ * 下方 40% 全是空白**，有效像素只占 16.7%（TASK-011 §3.1）。
+ * 上移到 0.52 后，上方让给标题区（`StoryHeader`）、下方让给字幕条
+ * （`SubtitleBar`），三段式版式才立得住。
+ */
+const DEFAULT_TIMELINE_Y_RATIO = 0.52;
+
+/**
+ * 非活动节点的透明度。
+ *
+ * 原为 0.4。实测它把非活动 featured 节点的金色标记压到 **2.25 : 1** ——
+ * 八张卡里唯一该被看见的两张，在大部分时间里是最看不清的两张
+ * （TASK-011 §3.6）。"降透明 = 表达聚焦"的意图没错，错在把**可读性**
+ * 当成层级手段。0.72 时正文对比度 8.52 : 1，达标；层级改由边框亮度、
+ * 光晕与背景明度表达（见 `EventCard`）。
+ */
+const INACTIVE_OPACITY = 0.72;
+/** intro / outro 阶段所有节点的统一透明度。 */
+const AMBIENT_OPACITY = 0.62;
 
 function resolveOptions(options: TimelineLayoutOptions): {
   width: number;
@@ -42,7 +75,7 @@ function resolveOptions(options: TimelineLayoutOptions): {
   const width = options.width;
   const height = options.height;
   const paddingX = options.paddingX ?? DEFAULT_PADDING_X;
-  const timelineY = options.timelineY ?? height * 0.6;
+  const timelineY = options.timelineY ?? height * DEFAULT_TIMELINE_Y_RATIO;
   return { width, height, paddingX, timelineY };
 }
 
@@ -89,7 +122,12 @@ export function computeTimelineLayout(
   const items: TimelineLayoutItem[] = nodes.map((node, i) => {
     const x = (worldX[i] ?? 0) - camWorldX + width / 2;
     const visible = x >= -width * 0.5 && x <= width * 1.5;
-    const opacity = inIntro || inOutro ? 0.5 : node.id === activeNodeId ? 1.0 : 0.4;
+    const opacity =
+      inIntro || inOutro
+        ? AMBIENT_OPACITY
+        : node.id === activeNodeId
+          ? 1.0
+          : INACTIVE_OPACITY;
     return { id: node.id, x, y: worldY, visible, opacity };
   });
 
