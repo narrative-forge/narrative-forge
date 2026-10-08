@@ -3,65 +3,65 @@
     "items": [
       {
         "id": "fourth-front-northward",
-        "x": 1965.714286,
-        "y": 648,
+        "x": 1920,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "huining-assembly",
-        "x": 2217.142857,
-        "y": 648,
+        "x": 2160,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-first-front-reaches-north-shaanxi",
         "x": 960,
-        "y": 648,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-second-front-formed",
-        "x": 1714.285714,
-        "y": 648,
+        "x": 1680,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-second-sixth-corps-join-fourth",
-        "x": 1462.857143,
-        "y": 648,
+        "x": 1440,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "second-front-arrives-gansu",
-        "x": 2468.571429,
-        "y": 648,
+        "x": 2400,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "three-main-forces-assembly",
-        "x": 2720,
-        "y": 648,
+        "x": 2640,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "west-expedition-launched",
-        "x": 1211.428571,
-        "y": 648,
+        "x": 1200,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       }
     ],
     "timeline": {
       "x0": 960,
-      "x1": 2720,
-      "y": 648
+      "x1": 2640,
+      "y": 561.6
     },
     "activeNodeId": null
   },
@@ -69,65 +69,65 @@
     "items": [
       {
         "id": "fourth-front-northward",
-        "x": 1965.714286,
-        "y": 648,
+        "x": 1920,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "huining-assembly",
-        "x": 2217.142857,
-        "y": 648,
+        "x": 2160,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-first-front-reaches-north-shaanxi",
         "x": 960,
-        "y": 648,
+        "y": 561.6,
         "visible": true,
         "opacity": 1
       },
       {
         "id": "red-second-front-formed",
-        "x": 1714.285714,
-        "y": 648,
+        "x": 1680,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-second-sixth-corps-join-fourth",
-        "x": 1462.857143,
-        "y": 648,
+        "x": 1440,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "second-front-arrives-gansu",
-        "x": 2468.571429,
-        "y": 648,
+        "x": 2400,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "three-main-forces-assembly",
-        "x": 2720,
-        "y": 648,
+        "x": 2640,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "west-expedition-launched",
-        "x": 1211.428571,
-        "y": 648,
+        "x": 1200,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       }
     ],
     "timeline": {
       "x0": 960,
-      "x1": 2720,
-      "y": 648
+      "x1": 2640,
+      "y": 561.6
     },
     "activeNodeId": "red-first-front-reaches-north-shaanxi"
   },
@@ -135,65 +135,65 @@
     "items": [
       {
         "id": "fourth-front-northward",
-        "x": 1211.428571,
-        "y": 648,
+        "x": 1200,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "huining-assembly",
-        "x": 1462.857143,
-        "y": 648,
+        "x": 1440,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-first-front-reaches-north-shaanxi",
-        "x": 205.714286,
-        "y": 648,
+        "x": 240,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-second-front-formed",
         "x": 960,
-        "y": 648,
+        "y": 561.6,
         "visible": true,
         "opacity": 1
       },
       {
         "id": "red-second-sixth-corps-join-fourth",
-        "x": 708.571429,
-        "y": 648,
+        "x": 720,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "second-front-arrives-gansu",
-        "x": 1714.285714,
-        "y": 648,
+        "x": 1680,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "three-main-forces-assembly",
-        "x": 1965.714286,
-        "y": 648,
+        "x": 1920,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "west-expedition-launched",
-        "x": 457.142857,
-        "y": 648,
+        "x": 480,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       }
     ],
     "timeline": {
-      "x0": 205.714286,
-      "x1": 1965.714286,
-      "y": 648
+      "x0": 240,
+      "x1": 1920,
+      "y": 561.6
     },
     "activeNodeId": "red-second-front-formed"
   },
@@ -201,65 +201,65 @@
     "items": [
       {
         "id": "fourth-front-northward",
-        "x": 205.714286,
-        "y": 648,
+        "x": 240,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "huining-assembly",
-        "x": 457.142857,
-        "y": 648,
+        "x": 480,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-first-front-reaches-north-shaanxi",
-        "x": -800,
-        "y": 648,
+        "x": -720,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-second-front-formed",
-        "x": -45.714286,
-        "y": 648,
+        "x": 0,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "red-second-sixth-corps-join-fourth",
-        "x": -297.142857,
-        "y": 648,
+        "x": -240,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "second-front-arrives-gansu",
-        "x": 708.571429,
-        "y": 648,
+        "x": 720,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       },
       {
         "id": "three-main-forces-assembly",
         "x": 960,
-        "y": 648,
+        "y": 561.6,
         "visible": true,
         "opacity": 1
       },
       {
         "id": "west-expedition-launched",
-        "x": -548.571429,
-        "y": 648,
+        "x": -480,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.4
+        "opacity": 0.72
       }
     ],
     "timeline": {
-      "x0": -800,
+      "x0": -720,
       "x1": 960,
-      "y": 648
+      "y": 561.6
     },
     "activeNodeId": "three-main-forces-assembly"
   },
@@ -267,65 +267,65 @@
     "items": [
       {
         "id": "fourth-front-northward",
-        "x": 205.714286,
-        "y": 648,
+        "x": 240,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "huining-assembly",
-        "x": 457.142857,
-        "y": 648,
+        "x": 480,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-first-front-reaches-north-shaanxi",
-        "x": -800,
-        "y": 648,
+        "x": -720,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-second-front-formed",
-        "x": -45.714286,
-        "y": 648,
+        "x": 0,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "red-second-sixth-corps-join-fourth",
-        "x": -297.142857,
-        "y": 648,
+        "x": -240,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "second-front-arrives-gansu",
-        "x": 708.571429,
-        "y": 648,
+        "x": 720,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "three-main-forces-assembly",
         "x": 960,
-        "y": 648,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       },
       {
         "id": "west-expedition-launched",
-        "x": -548.571429,
-        "y": 648,
+        "x": -480,
+        "y": 561.6,
         "visible": true,
-        "opacity": 0.5
+        "opacity": 0.62
       }
     ],
     "timeline": {
-      "x0": -800,
+      "x0": -720,
       "x1": 960,
-      "y": 648
+      "y": 561.6
     },
     "activeNodeId": null
   }
