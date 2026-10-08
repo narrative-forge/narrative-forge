@@ -13,6 +13,13 @@ export interface TimelineNode {
    */
   activeAmount: number;
   featured: boolean;
+  /**
+   * 节点时间标签（已格式化，如 `1936.10`），渲染在圆点下方。
+   *
+   * TASK-011 §3.7：轴线上的年份刻度与卡片上的完整日期一起，把"时间线"
+   * 重新变回时间线 —— 观众能看出每站之间隔了多久。
+   */
+  year?: string;
 }
 
 export interface TimelineProps {
@@ -32,6 +39,15 @@ const DOT_BASE_SIZE = 12;
 const DOT_EMPHASIS_GROWTH = 6;
 /** 活动圆点光晕的最大 alpha（0x88 ≈ 53%），线性随活跃度淡入。 */
 const DOT_GLOW_MAX_ALPHA = 0x88;
+/**
+ * 轴线厚度（像素）。
+ *
+ * 原为 4px：配合原线色 `#2a3144`（对比度 1.49:1）实测"基本看不到"。
+ * 线色已提到 `#5a6889`（3.41:1），这里同时加粗到 6px（TASK-011 §5 P0 #4）。
+ */
+const LINE_THICKNESS = 6;
+/** 年份刻度相对轴线的下移距离（像素）。 */
+const YEAR_OFFSET_Y = 34;
 
 /**
  * 时间轴视觉元素：水平线 + 节点圆点。所有坐标均为视口坐标，
@@ -55,11 +71,11 @@ export const Timeline: FC<TimelineProps> = ({ x0, x1, y, nodes }) => {
         style={{
           position: 'absolute',
           left: x0,
-          top: y,
+          top: y - LINE_THICKNESS / 2,
           width: lineWidth,
-          height: 4,
+          height: LINE_THICKNESS,
           backgroundColor: tokens.color.timelineLine,
-          borderRadius: 2,
+          borderRadius: LINE_THICKNESS / 2,
         }}
       />
       {nodes.map((node) => {
@@ -70,25 +86,49 @@ export const Timeline: FC<TimelineProps> = ({ x0, x1, y, nodes }) => {
         const dotColor = interpolateColor(tokens.color.muted, tokens.color.accent, emphasis);
         const glowAlpha = Math.round(node.activeAmount * DOT_GLOW_MAX_ALPHA);
         return (
-          <div
-            key={node.id}
-            style={{
-              position: 'absolute',
-              left: node.x,
-              top: y,
-              width: size,
-              height: size,
-              marginLeft: -size / 2,
-              marginTop: -size / 2,
-              borderRadius: '50%',
-              backgroundColor: dotColor,
-              border: `2px solid ${tokens.color.background}`,
-              boxShadow:
-                glowAlpha > 0
-                  ? `0 0 16px ${tokens.color.accent}${glowAlpha.toString(16).padStart(2, '0')}`
-                  : 'none',
-            }}
-          />
+          <div key={node.id}>
+            <div
+              style={{
+                position: 'absolute',
+                left: node.x,
+                top: y,
+                width: size,
+                height: size,
+                marginLeft: -size / 2,
+                marginTop: -size / 2,
+                borderRadius: '50%',
+                backgroundColor: dotColor,
+                border: `2px solid ${tokens.color.background}`,
+                boxShadow:
+                  glowAlpha > 0
+                    ? `0 0 16px ${tokens.color.accent}${glowAlpha.toString(16).padStart(2, '0')}`
+                    : 'none',
+              }}
+            />
+            {node.year !== undefined && node.year !== '' ? (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: node.x,
+                  top: y + YEAR_OFFSET_Y,
+                  transform: 'translateX(-50%)',
+                  fontSize: 28,
+                  fontWeight: 500,
+                  letterSpacing: 1,
+                  whiteSpace: 'nowrap',
+                  color: node.featured
+                    ? tokens.color.accent
+                    : interpolateColor(
+                        tokens.color.muted,
+                        tokens.color.foreground,
+                        node.activeAmount
+                      ),
+                }}
+              >
+                {node.year}
+              </div>
+            ) : null}
+          </div>
         );
       })}
     </div>
